@@ -1,6 +1,8 @@
 package com.example.developednewsfeed.user.service;
 
 import com.example.developednewsfeed.common.config.PasswordEncoder;
+import com.example.developednewsfeed.common.exception.ApplicationException;
+import com.example.developednewsfeed.common.exception.ErrorCode;
 import com.example.developednewsfeed.user.dto.response.UserResponseDto;
 import com.example.developednewsfeed.user.entity.User;
 import com.example.developednewsfeed.user.repository.UserRepository;
@@ -19,7 +21,7 @@ public class UserService {
     public UserResponseDto save(String email, String password, String selfIntroduction) {
 
         if(userRepository.existsByEmail(email)) {
-            throw new IllegalStateException("이미 존재하는 이메일입니다.");
+            throw new ApplicationException(ErrorCode.NOT_FOUND_USER);
         }
 
         String encodedPassword = passwordEncoder.encode(password);
@@ -33,7 +35,7 @@ public class UserService {
     public UserResponseDto findByEmail(String email) {
 
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalStateException("존재하지 않는 유저입니다.")
+                () -> new ApplicationException(ErrorCode.NOT_FOUND_USER)
         );
 
         return UserResponseDto.of(user);

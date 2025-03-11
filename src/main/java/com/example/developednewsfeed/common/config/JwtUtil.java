@@ -1,5 +1,6 @@
 package com.example.developednewsfeed.common.config;
 
+import com.example.developednewsfeed.common.exception.ServerException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -50,7 +51,7 @@ public class JwtUtil {
             return tokenValue.substring(7);
         }
         //todo exception 처리
-        throw new IllegalStateException("Not Found Token");
+        throw new ServerException("Not Found Token");
     }
 
     public Claims extractClaims(String token) {
