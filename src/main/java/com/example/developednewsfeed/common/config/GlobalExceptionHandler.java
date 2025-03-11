@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<ErrorResponse> exHandle(ApplicationException e) {
-        return ResponseEntity.status(e.getStatus()).body(new ErrorResponse(e.getMessage(), e.getErrorCode(), null));
+        return ResponseEntity.status(e.getStatus()).body(new ErrorResponse(e.getMessage(), e.getErrorCode()));
     }
 
     @ExceptionHandler(InvalidRequestException.class)
