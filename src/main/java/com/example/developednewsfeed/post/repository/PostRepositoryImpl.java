@@ -1,25 +1,27 @@
-package com.example.developednewsfeed.user.repository;
+package com.example.developednewsfeed.post.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 
-@RequiredArgsConstructor
-public class UserRepositoryCustomImpl implements UserRepositoryCustom{
+public class PostRepositoryImpl implements PostRepositoryCustom {
 
     @PersistenceContext
     private final EntityManager entityManager;
 
+    public PostRepositoryImpl(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
     @Override
     public void enableSoftDeleteFilter() {
         Session session = entityManager.unwrap(Session.class);
-        session.enableFilter("activeUserFilter");
+        session.enableFilter("activePostFilter");
     }
 
     @Override
     public void disableSoftDeleteFilter() {
         Session session = entityManager.unwrap(Session.class);
-        session.disableFilter("activeUserFilter");
+        session.disableFilter("activePostFilter");
     }
 }
