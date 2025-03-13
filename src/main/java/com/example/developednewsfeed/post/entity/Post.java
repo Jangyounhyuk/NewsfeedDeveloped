@@ -1,5 +1,6 @@
 package com.example.developednewsfeed.post.entity;
 
+import com.example.developednewsfeed.common.entity.BaseEntity;
 import com.example.developednewsfeed.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @FilterDef(name = "activePostFilter")
 @Filter(name = "activePostFilter", condition = "deleted_at is null")
-public class Post {
+public class Post extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
