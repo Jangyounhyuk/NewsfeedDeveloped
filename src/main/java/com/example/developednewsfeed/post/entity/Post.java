@@ -1,9 +1,9 @@
 package com.example.developednewsfeed.post.entity;
 
 import com.example.developednewsfeed.common.entity.BaseEntity;
+import com.example.developednewsfeed.post.dto.response.PostResponseDto;
 import com.example.developednewsfeed.user.entity.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,11 +37,23 @@ public class Post extends BaseEntity {
         this.numberOfComments = numberOfComments;
     }
 
+    public static Post toEntity(User user, PostResponseDto responseDto) {
+        return Post.builder()
+                .user(user)
+                .content(responseDto.getContent())
+                .numberOfComments(responseDto.getNumberOfComments())
+                .build();
+    }
+
     public void update(String content) {
         this.content = content;
     }
 
     public void changeDeletedAt(LocalDateTime localDateTime) {
         this.deletedAt = localDateTime;
+    }
+
+    public void updateNumberOfComments(int numberOfComments) {
+        this.numberOfComments = numberOfComments;
     }
 }

@@ -127,4 +127,12 @@ public class PostService {
             postRepository.deleteAll(postToDelete);
         }
     }
+
+    // commentService 에서 comment 생성 시 post Entity 가 필요하기에 Entity 반환 타입의 메서드 생성
+    @Transactional
+    public Post getPostEntity(Long postId) {
+        return postRepository.findById(postId).orElseThrow(
+                () -> new ApplicationException(ErrorCode.NOT_FOUND_POST)
+        );
+    }
 }
