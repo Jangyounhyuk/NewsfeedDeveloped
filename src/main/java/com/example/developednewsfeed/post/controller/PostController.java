@@ -34,6 +34,16 @@ public class PostController {
         return ResponseEntity.ok(postService.getAll(page, size));
     }
 
+    // 팔로우 하고 있는 유저들의 게시물 조회
+    @GetMapping("/posts/followingPosts")
+    public ResponseEntity<Page<PostResponseDto>> get(
+            @Auth AuthUser authUser,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(postService.getFollowingPosts(authUser, page, size));
+    }
+
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostResponseDto> get(@PathVariable Long postId) {
         return ResponseEntity.ok(postService.get(postId));

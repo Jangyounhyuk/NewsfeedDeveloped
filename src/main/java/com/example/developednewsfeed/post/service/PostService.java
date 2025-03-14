@@ -3,6 +3,7 @@ package com.example.developednewsfeed.post.service;
 import com.example.developednewsfeed.common.dto.AuthUser;
 import com.example.developednewsfeed.common.exception.ApplicationException;
 import com.example.developednewsfeed.common.exception.ErrorCode;
+import com.example.developednewsfeed.follow.service.FollowService;
 import com.example.developednewsfeed.post.dto.request.PostRequestDto;
 import com.example.developednewsfeed.post.dto.response.PostResponseDto;
 import com.example.developednewsfeed.post.entity.Post;
@@ -25,6 +26,7 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final FollowService followService;
 
     @Transactional
     public PostResponseDto save(AuthUser authUser, @Valid PostRequestDto requestDto) {
@@ -55,6 +57,24 @@ public class PostService {
         PageRequest pageable = PageRequest.of(adjustedPage, size, Sort.by("createdAt").descending());
         Page<Post> postPage = postRepository.findAll(pageable);
         return postPage.map(PostResponseDto::of);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PostResponseDto> getFollowingPosts(AuthUser authUser, int page, int size) {
+
+        User user = User.fromAuthUser(authUser);
+        List<Long> followingIds = followService.getFollowingIds(user.getId());
+
+        // activePostFilter 필터 활성화 메서드
+        postRepository.enableSoftDeleteFilter();
+
+        // 클라이언트에서 1부터 전달된 페이지 번호를 0 기반으로 조정
+        int adjustedPage = (page > 0) ? page - 1 : 0;
+
+        // 정렬 default 는 생성일 기준 내림차순
+        PageRequest pageable = PageRequest.of(adjustedPage, size, Sort.by("createdAt").descending());
+        Page<Post> followingPosts = postRepository.findByUserIdIn(followingIds, pageable);
+        return followingPosts.map(PostResponseDto::of);
     }
 
     @Transactional(readOnly = true)

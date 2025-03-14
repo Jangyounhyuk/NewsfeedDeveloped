@@ -24,7 +24,14 @@ public enum ErrorCode {
 
     // COMMENT CLASS ERROR
     MISMATCHED_COMMENT_WITH_POST("해당 게시물에서 작성된 댓글이 아닙니다.", HttpStatus.BAD_REQUEST),
-    MISMATCHED_COMMENT_WITH_USER("해당 댓글을 작성한 유저가 아닙니다. 권한이 없습니다.", HttpStatus.UNAUTHORIZED)
+    MISMATCHED_COMMENT_WITH_USER("해당 댓글을 작성한 유저가 아닙니다. 권한이 없습니다.", HttpStatus.UNAUTHORIZED),
+
+    // FOLLOW CLASS ERROR
+    CANT_FOLLOW_MYSELF("본인에게는 팔로우 신청을 할 수 없습니다.", HttpStatus.BAD_REQUEST),
+    ALREADY_EXIST_FOLLOW("이미 팔로우 관계입니다.", HttpStatus.BAD_REQUEST),
+    NOT_FOLLOWING_USER("팔로우하지 않은 유저입니다.", HttpStatus.BAD_REQUEST),
+    NO_FOLLOWING_USERS("팔로우하는 유저가 없습니다.", HttpStatus.BAD_REQUEST),
+    NO_FOLLOWER_USERS("나를 팔로우하는 유저가 없습니다", HttpStatus.BAD_REQUEST)
     ;
 
     private final String message;

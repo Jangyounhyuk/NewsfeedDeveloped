@@ -3,6 +3,7 @@ package com.example.developednewsfeed.user.service;
 import com.example.developednewsfeed.common.config.PasswordEncoder;
 import com.example.developednewsfeed.common.exception.ApplicationException;
 import com.example.developednewsfeed.common.exception.ErrorCode;
+import com.example.developednewsfeed.post.entity.Post;
 import com.example.developednewsfeed.user.dto.request.ChangePasswordRequestDto;
 import com.example.developednewsfeed.user.dto.request.UserDeleteRequestDto;
 import com.example.developednewsfeed.user.dto.request.UserRestoreRequestDto;
@@ -137,5 +138,20 @@ public class UserService {
         if (!usersToDelete.isEmpty()) {
             userRepository.deleteAll(usersToDelete);
         }
+    }
+
+    // followService 에서 follow 생성 시 user Entity 가 필요하기에 Entity 반환 타입의 메서드 생성
+    @Transactional
+    public User getUserEntity(Long userId) {
+        return userRepository.findById(userId).orElseThrow(
+                () -> new ApplicationException(ErrorCode.NOT_FOUND_USER)
+        );
+    }
+
+    // follow 하고 있는 유저들을 리스트로 반환하는 메서드
+    public List<UserResponseDto> getUsersByIds(List<Long> followingIds) {
+
+        List<User> followingUsers = userRepository.findByIdIn(followingIds);
+        return followingUsers.stream().map(UserResponseDto::of).toList();
     }
 }
