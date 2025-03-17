@@ -23,6 +23,7 @@ public enum ErrorCode {
 
     // POST CLASS ERROR
     MISMATCHED_POST_WITH_USER("로그인한 유저는 게시물 작성자와 다른 유저입니다. 권한이 없습니다.", HttpStatus.UNAUTHORIZED),
+    BAD_INPUT_DATE("종료일이 시작일보다 빠를 수 없습니다.", HttpStatus.BAD_REQUEST),
 
     // COMMENT CLASS ERROR
     MISMATCHED_COMMENT_WITH_POST("해당 게시물에서 작성된 댓글이 아닙니다.", HttpStatus.BAD_REQUEST),

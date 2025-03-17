@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -68,7 +69,31 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostResponseDto> getFollowingPosts(AuthUser authUser, int page, int size) {
+    public Page<PostResponseDto> getFilteringDatePosts(int page, int size, LocalDate searchStartDate, LocalDate searchEndDate) {
+
+        // 종료일이 시작일보다 앞설 때 예외처리
+        if (searchStartDate.isAfter(searchEndDate)) {
+            throw new ApplicationException(ErrorCode.BAD_INPUT_DATE);
+        }
+
+        // activePostFilter 필터 활성화 메서드
+        postRepository.enableSoftDeleteFilter();
+
+        // 클라이언트에서 1부터 전달된 페이지 번호를 0 기반으로 조정
+        int adjustedPage = (page > 0) ? page - 1 : 0;
+
+        // 입력받은 LocalDate -> LocalDateTime 으로 변환
+        LocalDateTime start = searchStartDate.atStartOfDay();
+        LocalDateTime end = searchEndDate.atTime(23, 59, 59);
+
+        // 정렬 default 는 생성일 기준 내림차순
+        PageRequest pageable = PageRequest.of(adjustedPage, size, Sort.by("createdAt").descending());
+        Page<Post> searchedPosts = postRepository.findSearchedPosts(pageable, start, end);
+        return searchedPosts.map(PostResponseDto::of);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PostResponseDto> getFollowingPosts(AuthUser authUser, String orderBy, int page, int size) {
 
         User user = User.fromAuthUser(authUser);
         List<Long> followingIds = followService.getFollowingIds(user.getId());
@@ -79,8 +104,17 @@ public class PostService {
         // 클라이언트에서 1부터 전달된 페이지 번호를 0 기반으로 조정
         int adjustedPage = (page > 0) ? page - 1 : 0;
 
+        // 정렬 조건 동적 생성
+        Sort sort = switch (orderBy) {
+            case "updatedAt" -> Sort.by("updatedAt").descending();
+            case "numberOfLikes" ->
+                // 좋아요 수가 동일한 경우 default 값인 생성일자 기준 내림차순 정렬 필요
+                    Sort.by(Sort.Order.desc("numberOfLikes"), Sort.Order.desc("createdAt"));
+            default -> Sort.by("createdAt").descending();
+        };
+
         // 정렬 default 는 생성일 기준 내림차순
-        PageRequest pageable = PageRequest.of(adjustedPage, size, Sort.by("createdAt").descending());
+        PageRequest pageable = PageRequest.of(adjustedPage, size, sort);
         Page<Post> followingPosts = postRepository.findByUserIdIn(followingIds, pageable);
         return followingPosts.map(PostResponseDto::of);
     }

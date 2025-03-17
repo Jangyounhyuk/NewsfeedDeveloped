@@ -8,9 +8,12 @@ import com.example.developednewsfeed.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,14 +38,25 @@ public class PostController {
         return ResponseEntity.ok(postService.getAll(orderBy, page, size));
     }
 
+    @GetMapping("/posts/search")
+    public Page<PostResponseDto> getFilteringDatePosts(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "19000101") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate searchStartDate,
+            @RequestParam(defaultValue = "99991231") @DateTimeFormat(pattern = "yyyyMMdd") LocalDate searchEndDate
+            ) {
+        return postService.getFilteringDatePosts(page, size, searchStartDate, searchEndDate);
+    }
+
     // 팔로우 하고 있는 유저들의 게시물 조회
     @GetMapping("/posts/followingPosts")
     public ResponseEntity<Page<PostResponseDto>> get(
             @Auth AuthUser authUser,
+            @RequestParam(defaultValue = "createdAt") String orderBy,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        return ResponseEntity.ok(postService.getFollowingPosts(authUser, page, size));
+        return ResponseEntity.ok(postService.getFollowingPosts(authUser, orderBy, page, size));
     }
 
     @GetMapping("/posts/{postId}")
