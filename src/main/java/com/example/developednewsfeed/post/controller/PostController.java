@@ -28,10 +28,11 @@ public class PostController {
 
     @GetMapping("/posts")
     public ResponseEntity<Page<PostResponseDto>> get(
+            @RequestParam(defaultValue = "createdAt") String orderBy,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        return ResponseEntity.ok(postService.getAll(page, size));
+        return ResponseEntity.ok(postService.getAll(orderBy, page, size));
     }
 
     // 팔로우 하고 있는 유저들의 게시물 조회

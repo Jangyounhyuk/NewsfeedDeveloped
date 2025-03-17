@@ -45,7 +45,7 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostResponseDto> getAll(int page, int size) {
+    public Page<PostResponseDto> getAll(String orderBy, int page, int size) {
 
         // activePostFilter 필터 활성화 메서드
         postRepository.enableSoftDeleteFilter();
@@ -53,8 +53,16 @@ public class PostService {
         // 클라이언트에서 1부터 전달된 페이지 번호를 0 기반으로 조정
         int adjustedPage = (page > 0) ? page - 1 : 0;
 
+        // 정렬 조건 동적 생성
+        Sort sort = switch (orderBy) {
+            case "updatedAt" -> Sort.by("updatedAt").descending();
+            case "numberOfLikes" ->
+                // 좋아요 수가 동일한 경우 default 값인 생성일자 기준 내림차순 정렬 필요
+                    Sort.by(Sort.Order.desc("numberOfLikes"), Sort.Order.desc("createdAt"));
+            default -> Sort.by("createdAt").descending();
+        };
         // 정렬 default 는 생성일 기준 내림차순
-        PageRequest pageable = PageRequest.of(adjustedPage, size, Sort.by("createdAt").descending());
+        PageRequest pageable = PageRequest.of(adjustedPage, size, sort);
         Page<Post> postPage = postRepository.findAll(pageable);
         return postPage.map(PostResponseDto::of);
     }
