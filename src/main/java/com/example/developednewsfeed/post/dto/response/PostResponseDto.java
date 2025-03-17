@@ -11,6 +11,7 @@ public class PostResponseDto {
     private final Long id;
     private final Long userId;
     private final String content;
+    private final int numberOfLikes;
     private final int numberOfComments;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
@@ -18,6 +19,7 @@ public class PostResponseDto {
     public PostResponseDto(
             Long id, Long userId,
             String content,
+            int numberOfLikes,
             int numberOfComments,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
@@ -25,6 +27,7 @@ public class PostResponseDto {
         this.id = id;
         this.userId = userId;
         this.content = content;
+        this.numberOfLikes = numberOfLikes;
         this.numberOfComments = numberOfComments;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -35,6 +38,7 @@ public class PostResponseDto {
                 post.getId(),
                 post.getUser().getId(),
                 post.getContent(),
+                post.getNumberOfLikes(),
                 post.getNumberOfComments(),
                 post.getCreatedAt(),
                 post.getUpdatedAt()

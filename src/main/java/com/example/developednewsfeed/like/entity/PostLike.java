@@ -1,6 +1,5 @@
-package com.example.developednewsfeed.comment.entity;
+package com.example.developednewsfeed.like.entity;
 
-import com.example.developednewsfeed.common.entity.BaseEntity;
 import com.example.developednewsfeed.post.entity.Post;
 import com.example.developednewsfeed.user.entity.User;
 import jakarta.persistence.*;
@@ -8,10 +7,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @Entity
+@Getter
 @NoArgsConstructor
-public class Comment extends BaseEntity {
+public class PostLike {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,22 +23,9 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    private String content;
-    private int numberOfLikes;
-
     @Builder
-    public Comment(User user, Post post, String content, int numberOfLikes) {
+    public PostLike(User user, Post post) {
         this.user = user;
         this.post = post;
-        this.content = content;
-        this.numberOfLikes = numberOfLikes;
-    }
-
-    public void update(String content) {
-        this.content = content;
-    }
-
-    public void updateNumberOfLikes(int numberOfLikes) {
-        this.numberOfLikes = numberOfLikes;
     }
 }

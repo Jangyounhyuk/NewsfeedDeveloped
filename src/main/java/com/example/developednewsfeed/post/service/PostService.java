@@ -148,7 +148,7 @@ public class PostService {
         }
     }
 
-    // commentService 에서 comment 생성 시 post Entity 가 필요하기에 Entity 반환 타입의 메서드 생성
+    // commentService, postLikeService 에서 comment 생성 시 post Entity 가 필요하기에 Entity 반환 타입의 메서드 생성
     @Transactional
     public Post getPostEntity(Long postId) {
         return postRepository.findById(postId).orElseThrow(

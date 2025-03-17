@@ -11,6 +11,7 @@ public class CommentResponseDto {
     private final Long id;
     private final Long postId;
     private final String content;
+    private final int numberOfLikes;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
@@ -18,12 +19,14 @@ public class CommentResponseDto {
             Long id,
             Long postId,
             String content,
+            int numberOfLikes,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {
         this.id = id;
         this.postId = postId;
         this.content = content;
+        this.numberOfLikes = numberOfLikes;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -33,6 +36,7 @@ public class CommentResponseDto {
                 comment.getId(),
                 comment.getPost().getId(),
                 comment.getContent(),
+                comment.getNumberOfLikes(),
                 comment.getCreatedAt(),
                 comment.getUpdatedAt()
                 );

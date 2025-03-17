@@ -141,7 +141,7 @@ public class UserService {
     }
 
     // followService 에서 follow 생성 시 user Entity 가 필요하기에 Entity 반환 타입의 메서드 생성
-    @Transactional
+    @Transactional(readOnly = true)
     public User getUserEntity(Long userId) {
         return userRepository.findById(userId).orElseThrow(
                 () -> new ApplicationException(ErrorCode.NOT_FOUND_USER)
@@ -149,6 +149,7 @@ public class UserService {
     }
 
     // follow 하고 있는 유저들을 리스트로 반환하는 메서드
+    @Transactional(readOnly = true)
     public List<UserResponseDto> getUsersByIds(List<Long> followingIds) {
 
         List<User> followingUsers = userRepository.findByIdIn(followingIds);

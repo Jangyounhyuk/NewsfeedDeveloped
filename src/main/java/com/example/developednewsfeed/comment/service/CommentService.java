@@ -33,6 +33,7 @@ public class CommentService {
                 .user(user)
                 .post(post)
                 .content(requestDto.getContent())
+                .numberOfLikes(0)
                 .build();
 
         commentRepository.save(comment);
@@ -94,5 +95,13 @@ public class CommentService {
         // 게시물의 numberOfComments - 1
         post.updateNumberOfComments(post.getNumberOfComments() - 1);
         commentRepository.deleteById(commentId);
+    }
+
+    // commentLikeService 에서 좋아요 생성 시 comment Entity 가 필요하기에 Entity 반환 타입의 메서드 생성
+    @Transactional(readOnly = true)
+    public Comment getCommentEntity(Long commentId) {
+        return commentRepository.findById(commentId).orElseThrow(
+                () -> new ApplicationException(ErrorCode.NOT_FOUND_COMMENT)
+        );
     }
 }

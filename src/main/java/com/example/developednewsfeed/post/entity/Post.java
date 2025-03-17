@@ -27,22 +27,16 @@ public class Post extends BaseEntity {
     private User user;
 
     private String content;
+    private int numberOfLikes;
     private int numberOfComments;
     private LocalDateTime deletedAt;
 
     @Builder
-    public Post(User user, String content, int numberOfComments) {
+    public Post(User user, String content, int numberOfLikes, int numberOfComments) {
         this.user = user;
         this.content = content;
+        this.numberOfLikes = numberOfLikes;
         this.numberOfComments = numberOfComments;
-    }
-
-    public static Post toEntity(User user, PostResponseDto responseDto) {
-        return Post.builder()
-                .user(user)
-                .content(responseDto.getContent())
-                .numberOfComments(responseDto.getNumberOfComments())
-                .build();
     }
 
     public void update(String content) {
@@ -55,5 +49,9 @@ public class Post extends BaseEntity {
 
     public void updateNumberOfComments(int numberOfComments) {
         this.numberOfComments = numberOfComments;
+    }
+
+    public void updateNumberOfLikes(int numberOfLikes) {
+        this.numberOfLikes = numberOfLikes;
     }
 }
