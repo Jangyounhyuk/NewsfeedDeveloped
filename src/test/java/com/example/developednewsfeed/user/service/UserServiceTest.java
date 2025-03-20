@@ -18,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -433,7 +432,7 @@ class UserServiceTest {
     }
 
     @Test
-    void 여러명의_유저들을_userId로_조회_테스트() {
+    void 여러명의_사용자들을_userId로_조회_테스트() {
         // given
         Long userId1 = 1L;
         Long userId2 = 2L;
@@ -455,5 +454,23 @@ class UserServiceTest {
         assertEquals(2, result.size());
         assertEquals(userId1, result.get(0).getId());
         assertEquals(userId2, result.get(1).getId());
+    }
+
+    @Test
+    void 여러_사용자들_빈_리스트_조회_테스트() {
+        // given
+        Long userId1 = 1L;
+        Long userId2 = 2L;
+        List<Long> userIds = List.of(userId1, userId2);
+
+        given(userRepository.findByIdIn(userIds)).willReturn(List.of());
+
+        // when
+        List<UserResponseDto> result = userService.getUsersByIds(userIds);
+
+        // then
+        assertNotNull(result);
+        assertEquals(0, result.size());
+        assertTrue(result.isEmpty());
     }
 }
