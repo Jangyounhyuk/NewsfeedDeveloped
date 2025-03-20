@@ -21,5 +21,5 @@ public interface UserRepository extends JpaRepository<User, Long>, UserRepositor
     // 삭제 요청 후 2주 지난 사용자 삭제
     List<User> findAllByDeletedAtBefore(LocalDateTime twoWeeksAgo);
 
-    List<User> findByIdIn(List<Long> followingIds);
+    List<User> findByIdIn(List<Long> userIds);
 }

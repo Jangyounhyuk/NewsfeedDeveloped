@@ -148,11 +148,11 @@ public class UserService {
         );
     }
 
-    // follow 하고 있는 유저들을 리스트로 반환하는 메서드
+    // 여러명의 유저들을 리스트로 반환하는 메서드
     @Transactional(readOnly = true)
-    public List<UserResponseDto> getUsersByIds(List<Long> followingIds) {
+    public List<UserResponseDto> getUsersByIds(List<Long> userIds) {
 
-        List<User> followingUsers = userRepository.findByIdIn(followingIds);
-        return followingUsers.stream().map(UserResponseDto::of).toList();
+        List<User> Users = userRepository.findByIdIn(userIds);
+        return Users.stream().map(UserResponseDto::of).toList();
     }
 }
