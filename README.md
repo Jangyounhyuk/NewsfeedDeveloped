@@ -1,4 +1,34 @@
-API 호출
+**API 명세서**
+
+1. User
+
+![image](https://github.com/user-attachments/assets/95311bd8-f6c9-41bd-b605-0b56c1b271c7)
+
+![image](https://github.com/user-attachments/assets/a55a741b-341a-42e0-b260-9c62c50c75a3)
+
+2. Post
+
+![image](https://github.com/user-attachments/assets/7c8d0e4b-c05a-47c1-af15-4aee5840a46c)
+
+![image](https://github.com/user-attachments/assets/c800ae70-6030-48f0-9293-9e8d25061e16)
+
+3. Auth
+
+![image](https://github.com/user-attachments/assets/5cc0d3ce-e45a-4a28-a5d1-43cf279aab7b)
+
+4. Comment
+
+![image](https://github.com/user-attachments/assets/d5d56e01-e3d0-4508-9ec8-c1745ae60773)
+
+5. Like
+
+![image](https://github.com/user-attachments/assets/f93fa172-e265-48a4-8a8b-a5dfc879cc46)
+
+**ERD**
+
+![image](https://github.com/user-attachments/assets/302fcba1-e893-421e-a1b6-674035111665)
+
+**API 호출**
 
 1. Auth
 
