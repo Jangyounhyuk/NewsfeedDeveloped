@@ -12,12 +12,12 @@ import com.example.developednewsfeed.post.service.PostService;
 import com.example.developednewsfeed.user.entity.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -65,6 +65,31 @@ class CommentServiceTest {
         assertNotNull(result);
         assertEquals(content, result.getContent());
         assertEquals(1, post.getNumberOfComments());
+    }
+
+    @Test
+    void 댓글_다건_조회_테스트() {
+        // given
+        Long postId = 1L;
+        User user = new User(1L, "test@example.com");
+        Post post = new Post();
+        ReflectionTestUtils.setField(post, "id", postId);
+
+        List<Comment> comments = List.of(
+                Comment.builder().content("content1").user(user).post(post).build(),
+                Comment.builder().content("content2").user(user).post(post).build()
+        );
+
+        given(commentRepository.findAllByPostId(anyLong())).willReturn(comments);
+
+        // when
+        List<CommentResponseDto> result = commentService.getAll(postId);
+
+        // then
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals(comments.get(0).getContent(), result.get(0).getContent());
+        assertEquals(comments.get(1).getContent(), result.get(1).getContent());
     }
 
     @Test
