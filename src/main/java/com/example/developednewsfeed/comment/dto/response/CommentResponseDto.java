@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public class CommentResponseDto {
 
     private final Long id;
+    private final Long userId;
     private final Long postId;
     private final String content;
     private final int numberOfLikes;
@@ -17,6 +18,7 @@ public class CommentResponseDto {
 
     public CommentResponseDto(
             Long id,
+            Long userId,
             Long postId,
             String content,
             int numberOfLikes,
@@ -24,6 +26,7 @@ public class CommentResponseDto {
             LocalDateTime updatedAt
     ) {
         this.id = id;
+        this.userId = userId;
         this.postId = postId;
         this.content = content;
         this.numberOfLikes = numberOfLikes;
@@ -34,6 +37,7 @@ public class CommentResponseDto {
     public static CommentResponseDto of(Comment comment) {
         return new CommentResponseDto(
                 comment.getId(),
+                comment.getUser().getId(),
                 comment.getPost().getId(),
                 comment.getContent(),
                 comment.getNumberOfLikes(),

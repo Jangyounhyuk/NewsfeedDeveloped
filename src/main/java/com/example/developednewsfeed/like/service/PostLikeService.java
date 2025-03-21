@@ -43,7 +43,7 @@ public class PostLikeService {
                 .build();
 
         postLikeRepository.save(newPostLike);
-        post.updateNumberOfLikes(post.getNumberOfComments() + 1);
+        post.updateNumberOfLikes(post.getNumberOfLikes() + 1);
     }
 
     @Transactional
